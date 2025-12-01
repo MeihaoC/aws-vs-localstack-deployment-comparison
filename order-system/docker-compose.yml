@@ -1,0 +1,62 @@
+version: '3.8'
+
+# LocalStack Architecture
+# This setup mirrors the AWS architecture as closely as possible:
+# - LocalStack emulates SNS/SQS (core services being compared)
+# - Docker Compose manages containers (similar to ECS conceptually)
+# - Direct container access (no ALB, but same application code)
+#
+# Note: LocalStack doesn't support ECS/ALB, but the core SNS/SQS
+# message processing comparison is valid and meaningful.
+
+services:
+  localstack:
+    image: localstack/localstack:latest
+    container_name: localstack
+    ports:
+      - "4566:4566"
+      - "4571:4571"
+    environment:
+      - SERVICES=sns,sqs
+      - DEBUG=1
+      - DATA_DIR=/tmp/localstack/data
+    volumes:
+      - "./localstack-data:/tmp/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+
+  order-api:
+    build:
+      context: .
+      dockerfile: cmd/order-api/Dockerfile
+    container_name: order-api
+    ports:
+      - "8080:8080"
+    environment:
+      - AWS_ENDPOINT_URL=http://localstack:4566
+      - AWS_REGION=us-west-2
+      - SNS_TOPIC_ARN=arn:aws:sns:us-west-2:000000000000:order-processing-events
+    depends_on:
+      - localstack
+    networks:
+      - order-network
+
+  order-processor:
+    build:
+      context: .
+      dockerfile: cmd/order-processor/Dockerfile
+    container_name: order-processor
+    environment:
+      - AWS_ENDPOINT_URL=http://localstack:4566
+      - AWS_REGION=us-west-2
+      - SQS_QUEUE_URL=http://localstack:4566/000000000000/order-processing-queue
+      - NUM_WORKERS=5
+    depends_on:
+      - localstack
+      - order-api
+    networks:
+      - order-network
+
+networks:
+  order-network:
+    driver: bridge
+

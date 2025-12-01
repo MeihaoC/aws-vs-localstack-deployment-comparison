@@ -1,0 +1,34 @@
+# Compiled binaries
+order-system/order-api
+order-system/order-processor
+order-system/cmd/*/order-api
+order-system/cmd/*/order-processor
+
+# Terraform state files
+terraform/.terraform/
+terraform/*.tfstate
+terraform/*.tfstate.backup
+terraform/.terraform.lock.hcl
+
+# LocalStack data
+order-system/localstack-data/
+
+# Python cache
+locust/__pycache__/
+*.pyc
+__pycache__/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test results (optional - you might want to keep these)
+# locust/results/*.html
+# locust/results/*.csv
+

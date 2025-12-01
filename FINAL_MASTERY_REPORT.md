@@ -8,7 +8,7 @@
 
 ## Executive Summary
 
-This report compares the deployment of an asynchronous order processing system on AWS and LocalStack. The system uses SNS (Simple Notification Service) and SQS (Simple Queue Service) to process orders asynchronously. We tested both environments under identical load conditions and found that while LocalStack offers lower latency for development, AWS provides production-grade reliability with similar processing performance.
+This report compares the deployment of an asynchronous order processing system on AWS and LocalStack. The system uses SNS (Simple Notification Service) and SQS (Simple Queue Service) to process orders asynchronously. I tested both environments under identical load conditions and found that while LocalStack offers lower latency for development, AWS provides production-grade reliability with similar processing performance.
 
 **Key Finding:** LocalStack is 2x faster in response time (21ms vs 42ms) but AWS and LocalStack have nearly identical processing throughput and queue drain times, making LocalStack ideal for development/testing and AWS ideal for production.
 

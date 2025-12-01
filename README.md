@@ -6,7 +6,7 @@ This project compares the deployment of an asynchronous order processing system 
 
 ```
 final_mastery/
-├── FINAL_MASTERY_REPORT.md    # Main report (submit this)
+├── FINAL_MASTERY_REPORT.md    # Main report
 ├── order-system/               # Application code
 │   ├── cmd/
 │   │   ├── order-api/         # Order API service
